@@ -33,18 +33,26 @@ class DBConnection:
     def create_tables(self):
         conn = self.get_connection()
         cursor = conn.cursor()
-        query = ("CREATE TABLE IF NOT EXISTS agent_db (id INT PRIMARY KEY AUTO_INCREMENT,"
-                 " name VARCHAR(50) NOT NULL,"
-                 " specialty VARCHAR(50) NOT NULL,"
-                 " is_active BOOLEAN DEFAULT TRUE,"
-                 " completed_missions INT DEFAULT 0,"
-                 " failed_missions INT DEFAULT 0);"
-                 " CREATE TABLE IF NOT EXISTS missions_db (id INT PRIMARY KEY AUTO_INCREMENT"
-                 " ,name VARCHAR(50) NOT NULL,"
-                 " description TEXT NOT NULL,"
-                 " location VARCHAR(50) NOT NULL,"
-                 " difficulty INT CHECK(difficulty < 11 AND difficulty > 0),"
-                 " importance INT CHECK(importance < 11 AND importance > 0))")
+        query = ("""CREATE TABLE IF NOT EXISTS agent_db (
+                 id INT AUTO_INCREMENT PRIMARY KEY,
+                 name VARCHAR(50) NOT NULL,
+                 specialty VARCHAR(50) NOT NULL,
+                 is_active BOOLEAN DEFAULT TRUE,
+                 completed_missions INT DEFAULT 0,
+                 failed_missions INT DEFAULT 0,
+                 agent_rank ENUM('junior', 'senior', 'commander') NOT NULL)""",
+                """CREATE TABLE IF NOT EXISTS missions_db (
+                 id INT AUTO_INCREMENT PRIMARY KEY,
+                 name VARCHAR(50) NOT NULL,
+                 description TEXT NOT NULL,
+                 location VARCHAR(50) NOT NULL,
+                 difficulty INT CHECK(difficulty < 11 AND difficulty > 0),
+                 importance INT CHECK(importance < 11 AND importance > 0),
+                 status ENUM('NEW','ASSIGNED','IN_PROGRESS','COMPLETED','FAILED','CANCELLED') DEFAULT 'NEW',
+                 risk_level VARCHAR(50) NOT NULL,
+                 assigned_agent_id INT NULL DEFAULT NULL)""")
+
+
         for i in query:
             cursor.execute(i)
             conn.commit()
