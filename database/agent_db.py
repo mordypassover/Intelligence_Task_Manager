@@ -50,11 +50,36 @@ class AgentDB:
         conn.close()
         return is_updated
 
+    def deactivate_agent(self, id):
+        return self.update_agent(id, {'is_active': False})
 
+    def increment_completed(self, id):
+        conn =self.conn()
+        cursor = conn.cursor()
+        query = f"UPDATE agent_db SET completed_missions = completed_missions+1 WHERE id =%s"
+        cursor.execute(query, (id,))
+        is_updated = cursor.rowcount >0
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return is_updated
+
+    def increment_failed(self, id):
+        conn = self.conn()
+        cursor = conn.cursor()
+        query = f"UPDATE agent_db SET failed_missions = failed_missions+1 WHERE id =%s"
+        cursor.execute(query, (id,))
+        is_updated = cursor.rowcount > 0
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return is_updated
 
 if __name__ == "__main__":
     a = AgentDB()
     #print(a.create_agent({"name":"mordy", "specialty":"qwer","agent_rank":"senior"}))
     print(a.get_all_agents())
-    print(a.get_agent_by_id(1))
     # print(a.update_agent(1,{"specialty":"wer"} ))
+    # print(a.deactivate_agent(1))
+    # print(a.increment_completed(2))
+    # print(a.get_agent_by_id(2))
