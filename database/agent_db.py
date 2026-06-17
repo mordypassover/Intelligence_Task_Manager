@@ -25,7 +25,15 @@ class AgentDB:
         conn.close()
         return all
 
-
+    def get_agent_by_id(self, id):
+        conn = self.conn()
+        cursor = conn.cursor(dictionary=True)
+        query = "SELECT * FROM agent_db WHERE id =%s"
+        cursor.execute(query, (id,))
+        agent = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        return agent
 
 
 
@@ -33,3 +41,4 @@ if __name__ == "__main__":
     a = AgentDB()
     #print(a.create_agent({"name":"mordy", "specialty":"qwer","agent_rank":"senior"}))
     print(a.get_all_agents())
+    print(a.get_agent_by_id(1))
