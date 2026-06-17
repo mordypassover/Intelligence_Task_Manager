@@ -75,6 +75,31 @@ class AgentDB:
         conn.close()
         return is_updated
 
+    def get_agent_performance(self, id):
+        conn = self.conn()
+        cursor = conn.cursor()
+        query = "SELECT completed_missions, failed_missions  FROM agent_db WHERE id =%s"
+        cursor.execute(query, (id,))
+        agent_stats = cursor.fetchone()
+        cursor.close()
+        conn.close()
+
+        total =sum(agent_stats)
+
+        return {"completed_missions":agent_stats[0], "failed_missions":agent_stats[1],
+                "total":total, "success rate":(agent_stats[0]/total)* 100 if total else 0}
+
+    def count_active_agents(self):
+        conn = self.conn()
+        cursor = conn.cursor(dictionary=True)
+        query = "SELECT * FROM agent_db WHERE is_active= TRUE"
+        cursor.execute(query)
+        active_agents = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return active_agents
+
+
 if __name__ == "__main__":
     a = AgentDB()
     #print(a.create_agent({"name":"mordy", "specialty":"qwer","agent_rank":"senior"}))
@@ -83,3 +108,4 @@ if __name__ == "__main__":
     # print(a.deactivate_agent(1))
     # print(a.increment_completed(2))
     # print(a.get_agent_by_id(2))
+    print(a.count_active_agents())
