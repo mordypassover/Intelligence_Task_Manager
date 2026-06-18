@@ -15,3 +15,16 @@ def get_summery():
             "completed_missions": m.count_by_status("COMPLETED"),
             "failed_missions": m.count_by_status("FAILED"),
             "critical_missions": m.count_critical_missions()}
+
+@router.get("/reports/missions-by-status")
+def get_missions_by_status():
+    return {
+        "open": m.count_open_missions(),
+        "in_progress": m.count_by_status("IN_PROGRESS"),
+        "completed": m.count_by_status("COMPLETED"),
+        "failed": m.count_by_status("FAILED")
+    }
+
+@router.get("/reports/top-agent")
+def get_top_agent():
+    return m.get_top_agent()
