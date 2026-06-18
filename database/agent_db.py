@@ -91,13 +91,13 @@ class AgentDB:
 
     def count_active_agents(self):
         conn = self.conn()
-        cursor = conn.cursor(dictionary=True)
-        query = "SELECT * FROM agent_db WHERE is_active= TRUE"
+        cursor = conn.cursor()
+        query = "SELECT COUNT(*) FROM agent_db WHERE is_active= TRUE"
         cursor.execute(query)
-        active_agents = cursor.fetchall()
+        active_agents = cursor.fetchone()
         cursor.close()
         conn.close()
-        return active_agents
+        return active_agents[0]
 
 
 if __name__ == "__main__":
