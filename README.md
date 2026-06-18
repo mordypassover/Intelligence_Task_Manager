@@ -12,10 +12,17 @@ get agent and mission stats and handel assignment
 ## file build:
 
 intelligence-task-manager
+|-- main.py
 ├── database
 │   ├── db_connection.py
 │   ├── agent_db.py
 │   └── mission_db.py
+├── routes    
+│  ├── agent_routes.py
+│  ├── mission_routes.py
+│  └── report_routes.py
+├──logs
+│  └── app.log
 ├── README.md
 ├── requirements.txt
 └── .gitignore
