@@ -69,6 +69,7 @@ def assign_agent_to_missions(id:int, agent_id:int):
 
 @router.put("/missions{id}/start")
 def start_mission(id:int):
+    logger.info("starting mission")
     mission = m.get_mission_by_id(id)
     if mission["status"]!= "ASSIGNED":
         raise HTTPException(status_code=400, detail=f"cant start mission if status not ASSIGNED")
@@ -77,6 +78,7 @@ def start_mission(id:int):
 
 @router.put("/missions{id}/complete")
 def complete_mission(id:int):
+    logger.info("completing mission")
     mission = m.get_mission_by_id(id)
     if mission["status"] != "IN_PROGRESS":
         raise HTTPException(status_code=400, detail=f"cant complete mission if status not IN_PROGRESS")
@@ -85,6 +87,7 @@ def complete_mission(id:int):
 
 @router.put("/missions{id}/fail")
 def fail_mission(id:int):
+    logger.info("failing mission")
     mission = m.get_mission_by_id(id)
     if mission["status"] != "IN_PROGRESS":
         raise HTTPException(status_code=400, detail=f"cant fail mission if status not IN_PROGRESS")
@@ -93,6 +96,7 @@ def fail_mission(id:int):
 
 @router.put("/missions{id}/cancel")
 def cancel_mission(id:int):
+    logger.info("canceling mission")
     mission = m.get_mission_by_id(id)
     if mission["status"] != {'NEW','ASSIGNED'}:
         raise HTTPException(status_code=400, detail=f"cant cancel mission if status not NEW ore ASSIGNED")
