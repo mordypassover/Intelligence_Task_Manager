@@ -69,6 +69,79 @@ class MissionDB:
         conn.close()
         return is_updated
 
+    def get_open_missions_by_agent(self, id):
+        conn = self.conn()
+        cursor = conn.cursor(dictionary=True)
+        query = "SELECT * FROM missions_db WHERE status = 'ASSIGNED' AND assigned_agent_id = %s OR status ='IN_PROGRESS' AND assigned_agent_id = %s"
+        cursor.execute(query,(id,id))
+        opened = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return opened
+
+    def count_all_missions(self):
+        conn = self.conn()
+        cursor = conn.cursor()
+        query = "SELECT COUNT(*) FROM missions_db"
+        cursor.execute(query)
+        cnt = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        return cnt[0]
+
+    def count_by_status(self, status):
+        conn = self.conn()
+        cursor = conn.cursor()
+        query = "SELECT COUNT(*) FROM missions_db where status =%s"
+        cursor.execute(query,(status,))
+        cnt = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        return cnt[0]
+
+    def count_open_missions(self):
+        conn = self.conn()
+        cursor = conn.cursor()
+        query = "SELECT COUNT(*) FROM missions_db WHERE status = 'NEW' OR status = 'ASSIGNED' OR status = 'IN_PROGRESS'"
+        cursor.execute(query)
+        cnt = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        return cnt[0]
+
+    def count_critical_missions(self):
+        conn = self.conn()
+        cursor = conn.cursor()
+        query = "SELECT COUNT(*) FROM missions_db WHERE risk_level ='CRITICAL'"
+        cursor.execute(query)
+        cnt = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        return cnt[0]
+
+    def get_top_agent(self):
+        conn = self.conn()
+        cursor = conn.cursor(dictionary=True)
+        query = "SELECT * FROM missions_db "
+        cursor.execute(query)
+        all = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        all_agents_compleat ={}
+        for i in all():
+            if i["status"] == "COMPLETED":
+                if i["assigned_agent_id"] in all_agents_compleat:
+                    all_agents_compleat[i["assigned_agent_id"]] +=1
+                else:
+                    all_agents_compleat[i["assigned_agent_id"]] += 1
+        max_agent={}
+        for key, val in all_agents_compleat.items():
+            if not max_agent or val > max_agent["compleat"]:
+                max_agent ={"agent":key, "compleat": val}
+
+        return max_agent
+
 
 if __name__ == "__main__":
     a = MissionDB()
@@ -76,4 +149,8 @@ if __name__ == "__main__":
     print(a.get_all_missions())
     print(a.get_mission_by_id(2))
     #print(a.assign_mission(2,2))
-
+    print(a.get_open_missions_by_agent(2))
+    print(a.count_all_missions())
+    print(a.count_by_status("NEW"))
+    print(a.count_open_missions())
+    print(a.count_critical_missions())

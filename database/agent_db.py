@@ -102,7 +102,7 @@ class AgentDB:
 
 if __name__ == "__main__":
     a = AgentDB()
-    #print(a.create_agent({"name":"mordy", "specialty":"qwer","agent_rank":"senior"}))
+    #print(a.create_agent({"name":"mordy", "specialty":"qwer","agent_rank":"Senior"}))
     print(a.get_all_agents())
     # print(a.update_agent(1,{"specialty":"wer"} ))
     # print(a.deactivate_agent(1))
