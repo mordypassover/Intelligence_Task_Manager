@@ -43,11 +43,11 @@ class DBConnection:
                  agent_rank ENUM("Junior", "Senior", "Commander") NOT NULL)""",
                 """CREATE TABLE IF NOT EXISTS missions_db (
                  id INT AUTO_INCREMENT PRIMARY KEY,
-                 name VARCHAR(50) NOT NULL,
+                 title VARCHAR(50) NOT NULL,
                  description TEXT NOT NULL,
                  location VARCHAR(50) NOT NULL,
-                 difficulty INT CHECK(difficulty < 11 AND difficulty > 0),
-                 importance INT CHECK(importance < 11 AND importance > 0),
+                 difficulty INT CHECK(difficulty < 11 AND difficulty > 0) NOT NULL,
+                 importance INT CHECK(importance < 11 AND importance > 0) NOT NULL,
                  status ENUM('NEW','ASSIGNED','IN_PROGRESS','COMPLETED','FAILED','CANCELLED') DEFAULT 'NEW',
                  risk_level VARCHAR(50) NOT NULL,
                  assigned_agent_id INT NULL DEFAULT NULL)""")
