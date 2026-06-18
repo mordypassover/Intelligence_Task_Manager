@@ -129,7 +129,7 @@ class MissionDB:
         conn.close()
 
         all_agents_compleat ={}
-        for i in all():
+        for i in all:
             if i["status"] == "COMPLETED":
                 if i["assigned_agent_id"] in all_agents_compleat:
                     all_agents_compleat[i["assigned_agent_id"]] +=1
